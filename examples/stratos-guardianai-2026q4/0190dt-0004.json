@@ -1,0 +1,41 @@
+{
+  "event_id": "0190dt-0004",
+  "timestamp": "2026-11-03T17:12:00Z",
+  "kind": "defensetech.foreign-person.access-attempt-evaluated",
+  "source": "stratos-iam-prod",
+  "subject_ref": {
+    "scheme": "personnel-clearance-id-tokenized",
+    "value": "tok_clr_personnel_4a9"
+  },
+  "resource": {
+    "type": "foreign-person-access-attempt-log",
+    "id_tokenized": "tok_res_fpa_d4",
+    "cui_categorization": "CUI-SPECIFIED-NOFORN",
+    "export_control_status": "ITAR",
+    "foreign_person_access_restriction": "US-PERSON-ONLY"
+  },
+  "action": "stamp",
+  "outcome": {
+    "status": "blocked-by-foreign-person-restriction",
+    "recommendation": "halt-and-escalate-to-empowered-official"
+  },
+  "agent": {
+    "ai_tool_card_url": "https://vendord-guardianai.example/.well-known/ai-tool-cards/guardianai-3.x.json",
+    "ai_decision_card_url": "https://stratos-aerospace.example/.well-known/decisions/STRATOS-DEC-2026-DEF-0084.json",
+    "human_user_clearance_level_tokenized": "tok_clr_UNCLASSIFIED",
+    "human_user_us_person_status": "AUTHORIZED-FOREIGN-PERSON-WITH-LICENSE",
+    "ddtc_export_license_number_tokenized": "tok_ddtc_lic_9c1"
+  },
+  "regulatory_basis": [
+    "itar-22-cfr-120-130",
+    "ear-deemed-export-22-cfr-120-50"
+  ],
+  "distribution_statement": {
+    "statement_letter": "C",
+    "applied_at": "2026-11-03T17:12:00Z",
+    "rationale": "Inherited from source CUI-Specified-NoForn resource — distribution to US Government agencies + their contractors only"
+  },
+  "decision_card_ref": "https://stratos-aerospace.example/.well-known/decisions/STRATOS-DEC-2026-DEF-0084.json",
+  "prev_hash": "f27197270c9ac5c0e9a67e01e4d848ded6c4ad5da75fe3931758c5c7dcc160b5",
+  "hash": "9b325ec8bd51bcc5284f7bd8758e2c6ec4aeb7618fcb91520fd757e45f3f3432"
+}

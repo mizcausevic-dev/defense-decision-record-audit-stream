@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mizcausevic-dev/defense-decision-record-audit-stream/blob/main/schema/defense-decision-event.schema.json",
+  "title": "Defense Decision Record Audit Event",
+  "description": "Hash-chained append-only ledger event describing which AI tool produced which defense-domain decision — RFP / RFI response, technical-data-package analysis, weapon-system design analysis, threat-intel triage, contract-vehicle bid optimization, ITAR/EAR-export-control screening, CMMC POA&M update, classified-program AI inference — when, under which DFARS 252.204-7012 + CMMC 2.0 L2/L3 + NIST SP 800-171 / 800-172 + ITAR + EAR + DoD CUI Notice + DoDI 5230.24 + FAR 52.204-21 + NISPOM basis, under which buyer-published Decision Card. Bridges DIB-contractor + defense-prime SCIF/CAGE-coded operations + DD-254 chain semantics to the Kinetic Gain Protocol Suite audit-stream spine. EVERY event carries explicit cui_categorization + export_control_status + foreign_person_access_restriction — DefenseTech's first 3-axis design innovation versus sibling-vertical audit-streams.",
+  "type": "object",
+  "required": ["event_id", "timestamp", "kind", "source", "subject_ref", "resource", "action", "outcome", "agent", "regulatory_basis", "decision_card_ref", "prev_hash", "hash"],
+  "additionalProperties": false,
+  "properties": {
+    "event_id":   {"type": "string", "minLength": 1, "description": "UUID v7 recommended"},
+    "timestamp":  {"type": "string", "format": "date-time"},
+    "kind": {
+      "type": "string",
+      "enum": [
+        "defensetech.rfp.requirement-analyzed",
+        "defensetech.rfp.response-draft-generated",
+        "defensetech.technical-data-package.analyzed",
+        "defensetech.weapon-system.design-trade-evaluated",
+        "defensetech.threat-intel.indicator-triaged",
+        "defensetech.contract-vehicle.bid-optimized",
+        "defensetech.export-control.itar-ear-screening-performed",
+        "defensetech.export-control.deemed-export-flagged",
+        "defensetech.cmmc.poam-update-recommended",
+        "defensetech.cmmc.l2-l3-readiness-assessment-produced",
+        "defensetech.cui.spillage-detected",
+        "defensetech.cui.distribution-statement-applied",
+        "defensetech.classified.inference-performed-cleared-environment",
+        "defensetech.dfars.cyber-incident-flagged",
+        "defensetech.dfars.cyber-incident-report-filed",
+        "defensetech.foreign-person.access-attempt-evaluated",
+        "defensetech.security-clearance.access-decision-recommended",
+        "defensetech.deletion-requested"
+      ]
+    },
+    "source":     {"type": "string", "minLength": 1, "description": "The system that emitted the event (e.g. 'stratos-aerospace-cui-enclave-prod', 'vendord-guardianai-3.x')"},
+    "subject_ref": {
+      "type": "object",
+      "required": ["scheme", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "scheme": {"type": "string", "enum": ["cage-code-tokenized", "duns-or-uei-tokenized", "contract-vehicle-id-tokenized", "rfp-solicitation-number-tokenized", "weapon-system-program-id-tokenized", "technical-data-package-id-tokenized", "threat-indicator-id-tokenized", "cmmc-assessment-id-tokenized", "facility-clearance-id-tokenized", "personnel-clearance-id-tokenized"]},
+        "value":  {"type": "string", "minLength": 1, "description": "Tokenized subject identifier — raw CAGE codes, DUNS/UEI, contract numbers, solicitation numbers, program names, TDP ids, clearance ids MUST NOT appear in cleartext"}
+      }
+    },
+    "resource": {
+      "type": "object",
+      "required": ["type", "cui_categorization", "export_control_status", "foreign_person_access_restriction"],
+      "additionalProperties": false,
+      "properties": {
+        "type":              {"type": "string", "enum": ["rfp-solicitation-document", "rfp-response-draft", "technical-data-package", "weapon-system-design-document", "threat-intelligence-indicator", "contract-vehicle-record", "export-control-screening-record", "cmmc-poam-record", "cmmc-l2-l3-evidence-record", "cui-spillage-event-log", "distribution-statement-record", "classified-inference-output", "dfars-cyber-incident-report", "foreign-person-access-attempt-log", "security-clearance-access-decision"]},
+        "id_tokenized":      {"type": "string", "minLength": 1, "description": "Tokenized resource ID"},
+        "fields_accessed":   {"type": "array", "items": {"type": "string"}, "description": "Logical field names accessed"},
+        "cui_categorization": {
+          "type": "string",
+          "enum": ["PUBLIC", "CUI-BASIC", "CUI-SPECIFIED", "CUI-SPECIFIED-NOFORN", "CONTROLLED-NOFORN", "CLASSIFIED-CONFIDENTIAL", "CLASSIFIED-SECRET", "CLASSIFIED-TOP-SECRET", "SCI"],
+          "description": "DefenseTech-unique field #1. Per CUI Notice 2020-04 + E.O. 13526 + ICD 705. CUI-SPECIFIED-NOFORN + CONTROLLED-NOFORN have additional foreign-person access restrictions. CLASSIFIED-* tiers require physical SCIF + matching clearance. SCI = Sensitive Compartmented Information requires program-specific read-on."
+        },
+        "export_control_status": {
+          "type": "string",
+          "enum": ["ITAR", "EAR-CCL-RESTRICTED", "EAR-99", "NOT-EXPORT-CONTROLLED"],
+          "description": "DefenseTech-unique field #2. ITAR = Int'l Traffic in Arms Regs (DDTC, 22 CFR 120-130) — defense articles + technical data. EAR-CCL-RESTRICTED = Export Admin Regs Commerce Control List (BIS, 15 CFR 730-774). EAR-99 = EAR but no specific ECCN. NOT-EXPORT-CONTROLLED = no export-control regime applies."
+        },
+        "foreign_person_access_restriction": {
+          "type": "string",
+          "enum": ["US-PERSON-ONLY", "AUTHORIZED-FOREIGN-PERSON-WITH-LICENSE", "FIVE-EYES-ONLY", "NATO-PLUS-ONLY", "NO-RESTRICTION"],
+          "description": "DefenseTech-unique field #3. US-PERSON-ONLY = 22 CFR 120.62 US-person definition (citizen, lawful permanent resident, asylee, refugee, protected individual). AUTHORIZED-FOREIGN-PERSON-WITH-LICENSE requires DDTC license number on every access event. FIVE-EYES-ONLY = AUS/CAN/NZL/GBR/USA. NATO-PLUS-ONLY = NATO + select allies."
+        }
+      }
+    },
+    "action": {"type": "string", "enum": ["read", "search", "generate", "transform", "stamp", "delete"]},
+    "outcome": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status":          {"type": "string", "enum": ["success", "minor-failure", "serious-failure", "major-failure", "blocked-by-cui-categorization", "blocked-by-export-control", "blocked-by-foreign-person-restriction", "blocked-by-clearance-level", "blocked-by-cmmc-poam-open"]},
+        "recommendation":  {"type": "string", "enum": ["advisory-only", "supervisor-review-required", "production-ready", "halt-and-escalate-to-fso", "halt-and-escalate-to-empowered-official", "no-recommendation"], "description": "production-ready PROHIBITED on classified/SCI/CUI-NOFORN tiers without FSO (Facility Security Officer) co-sign"}
+      }
+    },
+    "agent": {
+      "type": "object",
+      "required": ["ai_tool_card_url", "ai_decision_card_url"],
+      "additionalProperties": false,
+      "properties": {
+        "ai_tool_card_url":          {"type": "string", "format": "uri"},
+        "ai_decision_card_url":      {"type": "string", "format": "uri"},
+        "human_user_clearance_level_tokenized": {"type": "string", "description": "Tokenized clearance level of the human user in the session (UNCLASSIFIED / SECRET / TOP-SECRET / TS-SCI)"},
+        "human_user_us_person_status": {"type": "string", "enum": ["US-PERSON-VERIFIED", "AUTHORIZED-FOREIGN-PERSON-WITH-LICENSE", "NOT-VERIFIED"], "description": "REQUIRED on events touching ITAR or NoForn resources"},
+        "ddtc_export_license_number_tokenized": {"type": "string", "description": "Tokenized DDTC license number on AUTHORIZED-FOREIGN-PERSON events"},
+        "fso_session_id_tokenized":  {"type": "string", "description": "Tokenized Facility Security Officer session id when FSO co-sign required (CLASSIFIED + production-ready)"}
+      }
+    },
+    "regulatory_basis": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "dfars-252-204-7012-cdi-safeguarding",
+          "dfars-252-204-7012-cyber-incident-reporting",
+          "dfars-252-204-7019-nist-800-171-self-assessment",
+          "dfars-252-204-7020-cmmc-certification-required",
+          "dfars-252-204-7021-cmmc-assessment-level-2-or-3",
+          "cmmc-2-0-level-1-self-assessment",
+          "cmmc-2-0-level-2-c3pao-assessment",
+          "cmmc-2-0-level-3-dibcac-assessment",
+          "nist-sp-800-171-cui-protection",
+          "nist-sp-800-172-enhanced-security-requirements",
+          "itar-22-cfr-120-130",
+          "ear-15-cfr-730-774",
+          "ear-deemed-export-22-cfr-120-50",
+          "executive-order-13526-classified-national-security-information",
+          "icd-705-physical-and-technical-security-standards-scif",
+          "dodi-5230-24-distribution-statements",
+          "cui-notice-2020-04-implementation",
+          "nispom-32-cfr-117-national-industrial-security-program",
+          "far-52-204-21-basic-safeguarding",
+          "false-claims-act-31-usc-3729"
+        ]
+      }
+    },
+    "dfars_cyber_incident_report_ref": {
+      "type": "object",
+      "description": "REQUIRED on any kind=defensetech.dfars.cyber-incident-flagged or .cyber-incident-report-filed event per invariant #3. DFARS 252.204-7012(c)(1)(ii) — 72-hour report to DoD via dibnet.dod.mil",
+      "additionalProperties": false,
+      "required": ["report_id", "filed_at", "dibnet_dod_mil_url"],
+      "properties": {
+        "report_id":          {"type": "string"},
+        "filed_at":           {"type": "string", "format": "date-time"},
+        "dibnet_dod_mil_url": {"type": "string", "format": "uri"}
+      }
+    },
+    "distribution_statement": {
+      "type": "object",
+      "description": "DoDI 5230.24 distribution statement REQUIRED on any CUI-SPECIFIED or higher resource event per invariant #1",
+      "additionalProperties": false,
+      "required": ["statement_letter", "applied_at"],
+      "properties": {
+        "statement_letter": {"type": "string", "enum": ["A", "B", "C", "D", "E", "F", "X"], "description": "DoDI 5230.24 distribution statement letter codes A-F + X"},
+        "applied_at":       {"type": "string", "format": "date-time"},
+        "rationale":        {"type": "string"}
+      }
+    },
+    "redaction_applied": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "action"],
+        "additionalProperties": false,
+        "properties": {
+          "field":  {"type": "string"},
+          "action": {"type": "string", "enum": ["tokenize", "mask", "hash", "drop"]}
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value", "key_uri"],
+      "properties": {
+        "alg":     {"type": "string", "enum": ["ed25519"]},
+        "value":   {"type": "string", "pattern": "^[A-Za-z0-9+/=_-]+$"},
+        "key_uri": {"type": "string", "format": "uri"}
+      }
+    },
+    "decision_card_ref": {"type": "string", "format": "uri"},
+    "prev_hash":         {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "hash":              {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

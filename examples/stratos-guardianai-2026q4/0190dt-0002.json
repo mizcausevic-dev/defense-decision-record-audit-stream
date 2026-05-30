@@ -1,0 +1,41 @@
+{
+  "event_id": "0190dt-0002",
+  "timestamp": "2026-11-03T15:30:00Z",
+  "kind": "defensetech.export-control.itar-ear-screening-performed",
+  "source": "stratos-export-control-prod",
+  "subject_ref": {
+    "scheme": "technical-data-package-id-tokenized",
+    "value": "tok_tdp_F35_subsystem_22"
+  },
+  "resource": {
+    "type": "technical-data-package",
+    "id_tokenized": "tok_res_tdp_b2",
+    "cui_categorization": "CUI-SPECIFIED-NOFORN",
+    "export_control_status": "ITAR",
+    "foreign_person_access_restriction": "US-PERSON-ONLY"
+  },
+  "action": "search",
+  "outcome": {
+    "status": "success",
+    "recommendation": "supervisor-review-required"
+  },
+  "agent": {
+    "ai_tool_card_url": "https://vendord-guardianai.example/.well-known/ai-tool-cards/guardianai-3.x.json",
+    "ai_decision_card_url": "https://stratos-aerospace.example/.well-known/decisions/STRATOS-DEC-2026-DEF-0084.json",
+    "human_user_clearance_level_tokenized": "tok_clr_SECRET",
+    "human_user_us_person_status": "US-PERSON-VERIFIED"
+  },
+  "regulatory_basis": [
+    "itar-22-cfr-120-130",
+    "ear-deemed-export-22-cfr-120-50",
+    "nist-sp-800-172-enhanced-security-requirements"
+  ],
+  "distribution_statement": {
+    "statement_letter": "D",
+    "applied_at": "2026-11-03T15:30:00Z",
+    "rationale": "Distribution authorized to DoD + DoD contractors only"
+  },
+  "decision_card_ref": "https://stratos-aerospace.example/.well-known/decisions/STRATOS-DEC-2026-DEF-0084.json",
+  "prev_hash": "59b29453aaa68ce4719dea5b162525d77dc08b285f4a13aafeba7ca5143e9308",
+  "hash": "37318e5cb04125c1b06f998d84ba4499fdde309c6a2551efa982b4cb29472271"
+}

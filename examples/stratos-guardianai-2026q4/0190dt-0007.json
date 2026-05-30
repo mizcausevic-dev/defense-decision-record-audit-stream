@@ -1,0 +1,36 @@
+{
+  "event_id": "0190dt-0007",
+  "timestamp": "2026-11-04T16:00:00Z",
+  "kind": "defensetech.rfp.response-draft-generated",
+  "source": "stratos-proposal-prod",
+  "subject_ref": {
+    "scheme": "rfp-solicitation-number-tokenized",
+    "value": "tok_rfp_AF_RFP_2027_001"
+  },
+  "resource": {
+    "type": "rfp-response-draft",
+    "id_tokenized": "tok_res_rfp_resp_g7",
+    "cui_categorization": "CUI-BASIC",
+    "export_control_status": "NOT-EXPORT-CONTROLLED",
+    "foreign_person_access_restriction": "US-PERSON-ONLY"
+  },
+  "action": "generate",
+  "outcome": {
+    "status": "success",
+    "recommendation": "supervisor-review-required"
+  },
+  "agent": {
+    "ai_tool_card_url": "https://vendord-guardianai.example/.well-known/ai-tool-cards/guardianai-3.x.json",
+    "ai_decision_card_url": "https://stratos-aerospace.example/.well-known/decisions/STRATOS-DEC-2026-DEF-0084.json",
+    "human_user_clearance_level_tokenized": "tok_clr_UNCLASSIFIED",
+    "human_user_us_person_status": "US-PERSON-VERIFIED"
+  },
+  "regulatory_basis": [
+    "dfars-252-204-7012-cdi-safeguarding",
+    "far-52-204-21-basic-safeguarding",
+    "false-claims-act-31-usc-3729"
+  ],
+  "decision_card_ref": "https://stratos-aerospace.example/.well-known/decisions/STRATOS-DEC-2026-DEF-0084.json",
+  "prev_hash": "5d20eeedc0c8a140d647a3af4b3a171e2b03e1174e24a6fb768f22256573bf73",
+  "hash": "fbf7dab50760a317422bdcd55975fd58284bb8cdab38b5d1514ed2eb9d84e609"
+}

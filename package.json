@@ -1,0 +1,16 @@
+{
+  "name": "defense-decision-record-audit-stream",
+  "version": "0.1.0",
+  "description": "DefenseTech audit-stream Operator: per-defense-AI-decision events hash-chained for DFARS 252.204-7012 + CMMC 2.0 L2/L3 + NIST SP 800-171/172 + ITAR + EAR + DoDI 5230.24 + NISPOM + FAR 52.204-21 + False Claims Act evidence. Every event carries explicit cui_categorization + export_control_status + foreign_person_access_restriction — DefenseTech's first 3-axis design innovation.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:examples": "node src/build-examples.mjs",
+    "verify": "node src/verify.mjs examples/stratos-guardianai-2026q4-stream.ndjson",
+    "test": "npm run build:examples && npm run verify"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1"
+  }
+}
